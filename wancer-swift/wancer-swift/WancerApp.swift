@@ -18,5 +18,4 @@ struct WancerApp: App {
         .modelContainer(for:User.self)
     }
     
-    // test
 }
