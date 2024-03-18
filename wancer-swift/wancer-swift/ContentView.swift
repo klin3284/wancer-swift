@@ -11,6 +11,7 @@ import SwiftData
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var users: [User]
+    @State private var contacts: [CNContact] = []
 
     var body: some View {
         VStack {
@@ -24,6 +25,22 @@ struct ContentView: View {
                         Text(user.name)
                         Spacer()
                     }
+                }
+            }
+        }
+        List(contacts, id: \.identifier) { contact in
+            VStack {
+                Text("\(contact.givenName) \(contact.familyName) \(contact.phoneNumbers[0].value.stringValue)")
+                // Additional contact information can be displayed here
+            }
+        }
+        .onAppear {
+            fetchAllContacts { fetchedContacts, error in
+                if let fetchedContacts = fetchedContacts {
+                    print("Obtained contacts")
+                    self.contacts = fetchedContacts
+                } else if let error = error {
+                    print("Error fetching contacts: \(error)")
                 }
             }
         }
